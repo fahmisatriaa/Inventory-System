@@ -3,7 +3,7 @@ package view;
 import java.util.Scanner;
 
 import controller.ItemController;
-import controller.LoginController;
+import controller.AuthController;
 import models.Category;
 import models.Item;
 import models.Role;
@@ -12,7 +12,7 @@ import models.User;
 import repository.ItemRepository;
 import repository.UserRepository;
 import service.ItemService;
-import service.LoginService;
+import service.AuthService;
 
 public class Main {
 
@@ -29,13 +29,13 @@ public class Main {
         
         // Service
         
-        LoginService loginService = new LoginService(userRepository);
+        AuthService loginService = new AuthService(userRepository);
         ItemService itemService = new ItemService(itemRepository);
 
         
         // Controller
         
-        LoginController loginController = new LoginController(loginService);
+        AuthController loginController = new AuthController(loginService);
         ItemController itemController = new ItemController(itemService);
 
         

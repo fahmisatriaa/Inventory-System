@@ -1,12 +1,12 @@
 package controller;
 
-import service.LoginService;
+import service.AuthService;
 
-public class LoginController {
+public class AuthController {
 
-    private LoginService loginService;
+    private AuthService loginService;
 
-    public LoginController(LoginService loginService) {
+    public AuthController(AuthService loginService) {
         this.loginService = loginService;
     }
 

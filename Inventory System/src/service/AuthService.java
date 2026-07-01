@@ -3,11 +3,11 @@ package service;
 import models.User;
 import repository.UserRepository;
 
-public class LoginService {
+public class AuthService {
 
     private UserRepository userRepository;
 
-    public LoginService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
