@@ -5,24 +5,34 @@ import controller.CategoryController;
 import controller.ItemController;
 import controller.RoleController;
 import controller.UnitController;
+import controller.UserController;
+import controller.SupplierController;
+import controller.IncomingGoodsController;
 
 import models.Category;
 import models.Item;
 import models.Role;
 import models.Unit;
 import models.User;
-
+import models.Supplier;
+import models.IncomingGoods;
+                      
 import repository.CategoryRepository;
 import repository.ItemRepository;
 import repository.RoleRepository;
 import repository.UnitRepository;
 import repository.UserRepository;
+import repository.SupplierRepository;
+import repository.IncomingGoodsRepository;
 
 import service.AuthService;
 import service.CategoryService;
 import service.ItemService;
 import service.RoleService;
 import service.UnitService;
+import service.UserService;
+import service.SupplierService;
+import service.IncomingGoodsService;
 
 public class Main {
 
@@ -36,6 +46,8 @@ public class Main {
         CategoryRepository categoryRepository = new CategoryRepository();
         UnitRepository unitRepository = new UnitRepository();
         RoleRepository roleRepository = new RoleRepository();
+        SupplierRepository supplierRepository = new SupplierRepository();
+        IncomingGoodsRepository incomingGoodsRepository = new IncomingGoodsRepository();
 
         // Service
         AuthService authService = new AuthService(userRepository);
@@ -43,6 +55,9 @@ public class Main {
         CategoryService categoryService = new CategoryService(categoryRepository);
         UnitService unitService = new UnitService(unitRepository);
         RoleService roleService = new RoleService(roleRepository);
+        UserService userService = new UserService(userRepository);
+        SupplierService supplierService = new SupplierService(supplierRepository);
+        IncomingGoodsService incomingGoodsService =new IncomingGoodsService(incomingGoodsRepository);
 
         // Controller
         AuthController authController = new AuthController(authService);
@@ -50,7 +65,9 @@ public class Main {
         CategoryController categoryController = new CategoryController(categoryService);
         UnitController unitController = new UnitController(unitService);
         RoleController roleController = new RoleController(roleService);
-
+        UserController userController = new UserController(userService);
+        SupplierController supplierController = new SupplierController(supplierService);
+        IncomingGoodsController incomingGoodsController =new IncomingGoodsController(incomingGoodsService);
 
         // Login
         initializeData(userRepository);
@@ -68,7 +85,11 @@ public class Main {
                 itemController,
                 categoryController,
                 unitController,
-                roleController);
+                roleController,
+                userController,
+                supplierController,
+                incomingGoodsController
+            );
 
         input.close();
     }
@@ -122,7 +143,10 @@ public class Main {
         ItemController itemController,
         CategoryController categoryController,
         UnitController unitController,
-        RoleController roleController) {
+        RoleController roleController,
+        UserController userController,
+        SupplierController supplierController,
+        IncomingGoodsController incomingGoodsController) {
 
     int pilihan;
 
@@ -133,7 +157,10 @@ public class Main {
         System.out.println("2. Manage Category");
         System.out.println("3. Manage Unit");
         System.out.println("4. Manage Role");
-        System.out.println("5. Exit");
+        System.out.println("5. Manage User");
+        System.out.println("6. Manage Supplier");
+        System.out.println("7. Manage Incoming Goods");
+        System.out.println("8. Exit");
         System.out.print("Choose Menu : ");
 
         pilihan = input.nextInt();
@@ -158,6 +185,18 @@ public class Main {
                 break;
 
             case 5:
+                displayUserMenu(input, userController);
+                break;
+
+            case 6:
+                 displaySupplierMenu(input, supplierController);
+                break;
+
+            case 7:
+                displayIncomingGoodsMenu(input, incomingGoodsController);
+                break;
+
+            case 8:
                 System.out.println("Terima kasih telah menggunakan Inventory System.");
                 break;
 
@@ -165,7 +204,7 @@ public class Main {
                 System.out.println("Menu tidak tersedia.");
         }
 
-    } while (pilihan != 5);
+    } while (pilihan != 8);
 }
 
 // menu item
@@ -459,4 +498,266 @@ public class Main {
         } while (pilihan != 3);
     }
 
-    }
+
+    public static void displayUserMenu(
+        Scanner input,
+        UserController userController) {
+
+    int pilihan;
+
+    do {
+
+        System.out.println("\n===== USER MENU =====");
+        System.out.println("1. Add User");
+        System.out.println("2. View Users");
+        System.out.println("3. Back");
+        System.out.print("Choose : ");
+
+        pilihan = input.nextInt();
+        input.nextLine();
+
+        switch (pilihan) {
+
+            case 1:
+
+                System.out.print("ID : ");
+                int id = input.nextInt();
+                input.nextLine();
+
+                System.out.print("Full Name : ");
+                String fullName = input.nextLine();
+
+                System.out.print("Username : ");
+                String username = input.nextLine();
+
+                System.out.print("Password : ");
+                String password = input.nextLine();
+
+                Role role = new Role(1, "Admin");
+
+                User user = new User(
+                        id,
+                        fullName,
+                        username,
+                        password,
+                        role);
+
+                userController.addUser(user);
+
+                System.out.println("User berhasil ditambahkan.");
+                break;
+
+            case 2:
+
+                System.out.println("\n===== USER LIST =====");
+
+                if (userController.getAllUsers().isEmpty()) {
+
+                    System.out.println("Belum ada user.");
+
+                } else {
+
+                    for (User users : userController.getAllUsers()) {
+
+                        System.out.println("---------------------");
+                        System.out.println("ID        : " + users.getId());
+                        System.out.println("Nama      : " + users.getFullName());
+                        System.out.println("Username  : " + users.getUsername());
+                        System.out.println("Role      : " + users.getRole().getRoleName());
+
+                    }
+
+                }
+
+                break;
+
+            case 3:
+                break;
+
+            default:
+                System.out.println("Menu tidak tersedia.");
+
+        }
+
+    } while (pilihan != 3);
+
+}
+    public static void displaySupplierMenu(
+        Scanner input,
+        SupplierController supplierController){
+
+            int pilihan;
+
+        
+         do{
+                System.out.println("\n===== SUPPLIER MENU =====");
+                System.out.println("1. Add Supplier");
+                System.out.println("2. View Suppliers");
+                System.out.println("3. Back");
+                System.out.print("Choose : ");
+
+                pilihan = input.nextInt();
+                input.nextLine();
+
+                switch (pilihan) {
+                  case 1:
+
+                        System.out.print("ID Supplier : ");
+                        int supplierId = input.nextInt();
+                        input.nextLine();
+
+                        System.out.print("Nama Supplier : ");
+                        String supplierName = input.nextLine();
+
+                        System.out.print("Alamat : ");
+                        String address = input.nextLine();
+
+                        System.out.print("No Telepon : ");
+                        String phoneNumber = input.nextLine();
+
+                        Supplier newSupplier = new Supplier(
+                                supplierId,
+                                supplierName,
+                                address,
+                                phoneNumber);
+
+                        supplierController.addSupplier(newSupplier);
+
+                        System.out.println("Supplier berhasil ditambahkan.");
+                        break;
+
+                    case 2:
+                        System.out.println("\n===== SUPPLIER LIST =====");
+
+                        if (supplierController.getallSuppliers().isEmpty()) {
+                            System.out.println("Belum ada supplier.");
+                        } else {
+                            for (Supplier s : supplierController.getallSuppliers()) {
+
+                                System.out.println("-----------------------");
+                                System.out.println("ID          : " + s.getId());
+                                System.out.println("Nama        : " + s.getSupplierName());
+                                System.out.println("Alamat      : " + s.getAddress());
+                                System.out.println("No Telepon  : " + s.getPhoneNumber());
+
+                            }
+                        }
+                        break;
+
+                    case 3:
+                        break;
+
+                    default:
+                        System.out.println("Menu tidak tersedia");
+                }
+            }while (pilihan != 3);
+        }
+
+        public static void displayIncomingGoodsMenu(
+        Scanner input,
+        IncomingGoodsController incomingGoodsController) {
+
+            int pilihan;
+
+            do {
+
+                System.out.println("\n===== INCOMING GOODS =====");
+                System.out.println("1. Add Incoming Goods");
+                System.out.println("2. View Incoming Goods");
+                System.out.println("3. Back");
+                System.out.print("Choose : ");
+
+                pilihan = input.nextInt();
+                input.nextLine();
+
+                switch (pilihan) {
+
+                    case 1:
+
+                        System.out.print("Transaction ID : ");
+                        int id = input.nextInt();
+                        input.nextLine();
+
+                        System.out.print("Date : ");
+                        String date = input.nextLine();
+
+                        System.out.print("Quantity : ");
+                        int quantity = input.nextInt();
+                        input.nextLine();
+
+                        Supplier supplier = new Supplier(
+                                1,
+                                "PT ABC",
+                                "Jakarta",
+                                "08123456789");
+
+                        Category category = new Category(1, "Food");
+                        Unit unit = new Unit(1, "Pcs");
+
+                        Item item = new Item(
+                                1,
+                                "Indomie",
+                                100,
+                                2500,
+                                3000,
+                                category,
+                                unit);
+
+                        IncomingGoods incomingGoods = new IncomingGoods(
+                                id,
+                                date,
+                                supplier,
+                                item,
+                                quantity);
+
+                        incomingGoodsController.addIncomingGoods(incomingGoods);
+
+                        System.out.println("Incoming Goods berhasil ditambahkan.");
+                        break;
+
+                    case 2:
+
+                        System.out.println("\n===== LIST INCOMING GOODS =====");
+
+                        if (incomingGoodsController.getAllIncomingGoods().isEmpty()) {
+
+                            System.out.println("Belum ada data.");
+
+                        } else {
+
+                            for (IncomingGoods data : incomingGoodsController.getAllIncomingGoods()) {
+
+                                System.out.println("----------------------------");
+                                System.out.println("ID        : " + data.getId());
+                                System.out.println("Date      : " + data.getDate());
+                                System.out.println("Supplier  : " + data.getSupplier().getSupplierName());
+                                System.out.println("Item      : " + data.getItem().getItemName());
+                                System.out.println("Quantity  : " + data.getQuantity());
+
+                            }
+
+                        }
+
+                        break;
+
+                    case 3:
+                        break;
+
+                    default:
+                        System.out.println("Menu tidak tersedia.");
+
+                }
+
+            } while (pilihan != 3);
+        }
+
+        }
+
+            
+
+
+
+
+
+
+
