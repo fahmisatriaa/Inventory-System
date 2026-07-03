@@ -14,7 +14,7 @@ public class SupplierController {
         supplierService.addSupplier(supplier);
     }
 
-    public ArrayList<Supplier> getallSuppliers(){
-        return supplierService.getallSuppliers();
+    public ArrayList<Supplier> getAllSuppliers(){
+        return supplierService.getAllSuppliers();
     }
 }
